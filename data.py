@@ -241,19 +241,3 @@ def getAllData(search):
     return  market_returns
 
 
-market_files = ['5ka', 'magnit', 'maxi']
-market_returns = {}
-remove_sumbols = "[']"
-
-for i in range(len(market_files)):
-    rows = []
-    with open("./" + market_files[i] + ".csv", 'r') as file:
-        csvreader = csv.reader(file)
-        for row in csvreader:
-            str_row = str(row)
-            for symbol in remove_sumbols:
-                str_row = str_row.replace(symbol, "")
-            rows.append(str_row.split(";"))
-
-    market_returns[market_files[i]] = rows
-print(list(market_returns.values())[0])

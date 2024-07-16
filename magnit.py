@@ -104,3 +104,6 @@ def magnitDoCsv(search):
             writer.writerow([str(data['data'][i]['name'])] + [true_price])
         print(str(data['data'][i]['name']) + " " + true_price)
 
+
+
+
