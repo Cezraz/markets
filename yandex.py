@@ -3,105 +3,75 @@ import requests
 import csv
 
 def yandexDoCsv(search):
-    flag = True
-    url = "https://magnit.ru/webgate/v2/goods/search"
-    url_get = "https://magnit.ru/webgate/v1/promotions/search?storeCode=290053&query="+search+"&limit=36&offset=0"
+    flag = False
+    search="сникерс"
+    url = "https://eda.yandex.ru/api/v1/menu/search"
+
+    cookies = {
+        'i': '3qkrkAc4SOM+mNfRtYyUYbIdtUxT/UqxXuNydj5N2IXKFujMSkLNT27e+Zfp4eoDgPyhmUjkWAA5Q93xqgGmdNwZCA8=',
+        'yandexuid': '959768691721201902',
+        'yp': '1721814036.szm.1:1280x1024:1280x863',
+        'is_gdpr': '0',
+        'is_gdpr_b': 'CO6pNRD0hwI=',
+        'yashr': '9097539661721209236',
+        'receive-cookie-deprecation': '1',
+        'bh': 'EkAiTm90L0EpQnJhbmQiO3Y9IjgiLCAiQ2hyb21pdW0iO3Y9IjEyNiIsICJHb29nbGUgQ2hyb21lIjt2PSIxMjYiKgI/MDoJIldpbmRvd3MiYJSj3rQG',
+        'ys': 'c_chck.731178649',
+        'PHPSESSID': '87bfc700f9014b0cb7863811fdbfbed9',
+        '_yasc': '9pHotwxS7eneISgPeSAUPLhMouw/Vft8abwwSKuJ27oNvtfDsxP++hRRFxGttHwHPRZd',
+        'eda_web': '{%22app%22:{%22analyticsSession%22:{%22id%22:%22lypom2it-ix6rhbwo5g-cfeov59itel-ulmup2wst8%22%2C%22start%22:1721211040%2C%22update%22:1721212456}%2C%22deliveryTime%22:null%2C%22themeVariantKey%22:%22light%22%2C%22xDeviceId%22:%22lypom2it-u0qe7cwft9-wxa5xvqol1-6mf94fxr8fb%22%2C%22lat%22:64.52620651492634%2C%22lon%22:40.60154645108283}}',
+    }
+
+    headers = {
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'ru',
+        'cache-control': 'no-cache',
+        'content-type': 'application/json;charset=UTF-8',
+        # 'cookie': 'i=3qkrkAc4SOM+mNfRtYyUYbIdtUxT/UqxXuNydj5N2IXKFujMSkLNT27e+Zfp4eoDgPyhmUjkWAA5Q93xqgGmdNwZCA8=; yandexuid=959768691721201902; yp=1721814036.szm.1:1280x1024:1280x863; is_gdpr=0; is_gdpr_b=CO6pNRD0hwI=; yashr=9097539661721209236; receive-cookie-deprecation=1; bh=EkAiTm90L0EpQnJhbmQiO3Y9IjgiLCAiQ2hyb21pdW0iO3Y9IjEyNiIsICJHb29nbGUgQ2hyb21lIjt2PSIxMjYiKgI/MDoJIldpbmRvd3MiYJSj3rQG; ys=c_chck.731178649; PHPSESSID=87bfc700f9014b0cb7863811fdbfbed9; _yasc=Z9952QacDR1EZoL9guKxODd0Bm2Wmq+e+JcslZuw2ENCGl92Zw+4q0a6gB7rTgz6fbNu; eda_web={%22app%22:{%22analyticsSession%22:{%22id%22:%22lypom2it-ix6rhbwo5g-cfeov59itel-ulmup2wst8%22%2C%22start%22:1721211040%2C%22update%22:1721216504}%2C%22deliveryTime%22:null%2C%22themeVariantKey%22:%22light%22%2C%22xDeviceId%22:%22lypom2it-u0qe7cwft9-wxa5xvqol1-6mf94fxr8fb%22%2C%22lat%22:64.52620651492634%2C%22lon%22:40.60154645108283}}',
+        'dnt': '1',
+        'origin': 'https://eda.yandex.ru',
+        'pragma': 'no-cache',
+        'priority': 'u=1, i',
+        'referer': 'https://eda.yandex.ru/retail/paterocka/search?placeSlug=pyaterochka_g9dvz&query=%D0%BC%D0%BE%D0%BB%D0%BE%D0%BA%D0%BE',
+        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        'x-app-version': '16.57.0',
+        'x-client-session': 'lypom2it-ix6rhbwo5g-cfeov59itel-ulmup2wst8',
+        'x-device-id': 'lypom2it-u0qe7cwft9-wxa5xvqol1-6mf94fxr8fb',
+        'x-platform': 'desktop_web',
+        'x-taxi': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 platform=eats_desktop_web',
+        'x-ya-coordinates': 'latitude=64.52620651492634,longitude=40.60154645108283',
+    }
 
     payload = {
-        "includeForAdults": True,
-        "term": search,
-        "pagination": {"offset": 0,"limit": 36},
-        "sort": {"order": "desc","type": "popularity"},
-        "storeCode": "290053",
-        "storeType": "1",
-        "catalogType": "1"}
-    headers = {
-    'Accept': 'application/json',
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-    'Content-Length': '183',
-    'Content-Type': 'application/json',
-    'Dnt':'1',
-    'Host':'magnit.ru',
-    'Pragma': 'no-cache',
-    'Referer': 'https://magnit.ru/',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    'X-App-Version': '7.0.0',
-    'X-Client-Name': 'magnit',
-    'X-Device-ID': '1084176D-1C26-E6AB-2B29-04D48306DC6D',
-    'X-Device-Platform': 'Web',
-    'X-Device-Tag': 'disabled',
-    'X-New-Magnit': 'true',
-    'X-Platform-Version': 'Windows Chrome 126',
-    'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
+        'region_id': 1,
+        'place_slug': 'pyaterochka_g9dvz',
+        'text': search,
+        'location': {
+            'lat': 64.52620651492634,
+            'lon': 40.60154645108283,
+        },
     }
-    headers_get = {
-    'Accept': '*/*',
-    'Accept-Encoding': 'gzip, deflate, br, zstd',
-    'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-    'Content-Type': 'application/json',
-    'Dnt':'1',
-    'Host':'magnit.ru',
-    'Pragma': 'no-cache',
-    'Referer': 'https://magnit.ru/',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    'X-App-Version': '7.0.0',
-    'X-Client-Name': 'magnit',
-    'X-Device-ID': '1084176D-1C26-E6AB-2B29-04D48306DC6D',
-    'X-Device-Platform': 'Web',
-    'X-Device-Tag': 'disabled',
-    'X-New-Magnit': 'true',
-    'X-Platform-Version': 'Windows Chrome 126',
-    'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    }
-
-    while flag:
-        response = requests.post(url, headers=headers, json=payload)
-        data = response.json()
-
-        if data['pagination']['totalCount'] < (payload['pagination']['offset'] +payload['pagination']['limit']):
-            flag = False
-        for i in range(len(data['items'])):
-            true_price = str(data['items'][i]['price'])[:-2] + ".99"
-            if payload['pagination']['offset'] == 0 and i == 0:
-
-                with open('magnit.csv', 'w+', newline='') as csvfile:
-                    writer = csv.writer(csvfile, delimiter=';',
-                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    writer.writerow(["name"]+["price"])
-                    writer.writerow([str(data['items'][i]['name'])] + [true_price])
-            else:
-                with open('magnit.csv', 'a+', newline='') as csvfile:
-                    writer = csv.writer(csvfile, delimiter=';',
-                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    writer.writerow([str(data['items'][i]['name'])] + [true_price])
-            #print(str(data['items'][i]['name']) + " " + true_price)
-           # print("Обработано " + str(i + 1) + " страниц(a/ы) из " + str(len(data['items'])))
-        payload['pagination']['offset'] += 36
-
-    response = requests.get(url_get, headers=headers_get)
+    response = requests.post(url, headers=headers, json=payload, cookies=cookies)
     data = response.json()
-    if search != "":
-        for i in range(len(data['data'])):
-            if "price" not in data['data'][i]:
-                continue
-            true_price = str(data['data'][i]['price'])[:-2] + ".99"
-            with open('magnit.csv', 'a+', newline='') as csvfile:
+    for item in range(len(data['blocks'][0]['payload']['products'])):
+        data_item=data['blocks'][0]['payload']['products'][item]
+        #print(data_item['name']+" "+data_item['decimalPrice'])
+        if item == 0:
+            with open('yandex_pyat.csv', 'w+', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow([str(data['data'][i]['name'])] + [true_price])
-            print(str(data['data'][i]['name']) + " " + true_price)
+                writer.writerow([data_item['name']] + [data_item['decimalPrice']])
+        else:
+            with open('yandex_pyat.csv', 'a+', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                writer.writerow([data_item['name']] + [data_item['decimalPrice']])
+    print("done")
+
+yandexDoCsv("")
