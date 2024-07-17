@@ -219,9 +219,9 @@ def maxiDoCsv(search):
 
 
 def getAllData(search):
-    #pyatDoCsv(search=search)
-    #magnitDoCsv(search=search)
-    #maxiDoCsv(search=search)
+    pyatDoCsv(search=search)
+    magnitDoCsv(search=search)
+    maxiDoCsv(search=search)
 
     market_files = ['5ka', 'magnit', 'maxi']
     market_returns = {}

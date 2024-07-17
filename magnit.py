@@ -1,6 +1,8 @@
 import json
 import requests
 import csv
+import pandas as pd
+import numpy as np
 
 def magnitDoCsv(search):
     flag = True
@@ -82,28 +84,35 @@ def magnitDoCsv(search):
                 with open('magnit.csv', 'w+', newline='') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    writer.writerow(["name"]+["price"])
                     writer.writerow([str(data['items'][i]['name'])] + [true_price])
             else:
                 with open('magnit.csv', 'a+', newline='') as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     writer.writerow([str(data['items'][i]['name'])] + [true_price])
-            print(str(data['items'][i]['name']) + " " + true_price)
+            #print(str(data['items'][i]['name']) + " " + true_price)
            # print("Обработано " + str(i + 1) + " страниц(a/ы) из " + str(len(data['items'])))
         payload['pagination']['offset'] += 36
 
     response = requests.get(url_get, headers=headers_get)
     data = response.json()
-    for i in range(len(data['data'])):
-        if "price" not in data['data'][i]:
-            continue
-        true_price = str(data['data'][i]['price'])[:-2] + ".99"
-        with open('magnit.csv', 'a+', newline='') as csvfile:
-            writer = csv.writer(csvfile, delimiter=';',
-                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([str(data['data'][i]['name'])] + [true_price])
-        print(str(data['data'][i]['name']) + " " + true_price)
+    if search != "":
+        for i in range(len(data['data'])):
+            if "price" not in data['data'][i]:
+                continue
+            true_price = str(data['data'][i]['price'])[:-2] + ".99"
+            with open('magnit.csv', 'a+', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                writer.writerow([str(data['data'][i]['name'])] + [true_price])
+            print(str(data['data'][i]['name']) + " " + true_price)
 
+#magnitDoCsv("")
 
+#with open("./magnit.csv", 'r') as file:
+#    csvreader = csv.reader(file)
+#    for row in csvreader:
+#        rows.append(str_row.split(";"))
 
 

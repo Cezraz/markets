@@ -40,7 +40,7 @@ def pDoCsv(search):
     while flag:
         response = requests.get(url, headers=headers, params=params)
         data = response.json()
-        #print(data['products'][0]['prices'])
+        print(data['products'][0]['prices'])
         if data['products']:
             flag = False
         for i in range(len(data['products'])):

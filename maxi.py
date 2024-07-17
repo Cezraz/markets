@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 
 def maxiDoCsv(search):
     #search ="adrenaline"
@@ -51,3 +54,4 @@ def maxiDoCsv(search):
                 for j in range(len(prices)):
                     writer.writerow([names[j]]+[prices[j]])
         print("Обработано "+str(i+1)+" страниц(a/ы) из "+str(total_pages))
+
