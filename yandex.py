@@ -3,8 +3,6 @@ import requests
 import csv
 
 def yandexDoCsv(search):
-    flag = False
-    search="сникерс"
     url = "https://eda.yandex.ru/api/v1/menu/search"
 
     cookies = {
@@ -60,8 +58,10 @@ def yandexDoCsv(search):
     response = requests.post(url, headers=headers, json=payload, cookies=cookies)
     data = response.json()
     for item in range(len(data['blocks'][0]['payload']['products'])):
-        data_item=data['blocks'][0]['payload']['products'][item]
-        #print(data_item['name']+" "+data_item['decimalPrice'])
+        data_item = data['blocks'][0]['payload']['products'][item]
+        print(str(data['blocks'][0]['payload']['products'][item]['name']))
+        if '\xd7' in data_item['name']:
+            data_item['name']=str(data_item['name']).replace('\xd7',"")
         if item == 0:
             with open('yandex_pyat.csv', 'w+', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
@@ -71,7 +71,7 @@ def yandexDoCsv(search):
             with open('yandex_pyat.csv', 'a+', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow([data_item['name']] + [data_item['decimalPrice']])
+                writer.writerow([str(data_item['name'])] + [str(data_item['decimalPrice'])])
     print("done")
 
-yandexDoCsv("")
+yandexDoCsv("молоко")
