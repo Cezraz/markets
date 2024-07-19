@@ -75,9 +75,9 @@ def bristolDoCsv(search):
         'products_without_shop': 'false',
     }
 
-    session=requests.session()
-    token_response=session.get(token_url,headers=token_headers,params=token_params)
-    res_cook=token_response.cookies
+    session = requests.session()
+    token_response = session.get(token_url,headers=token_headers,params=token_params)
+    res_cook = token_response.cookies
     response = session.get(url, headers=headers, params=params, cookies=res_cook)
     print(response.text)
     #data = response.json()
