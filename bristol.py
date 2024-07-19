@@ -1,32 +1,68 @@
 import json
 import requests
 import csv
+import time
+import re
 def bristolDoCsv(search):
     page=1
     flag=False
+    token_url="https://bristol.ru/search?s=%D0%BF%D0%B8%D0%B2%D0%BE"
     url = "https://api.mobile.bristol.ru/api/v3/products/search"
+    t = str(int(time.time()//1))
+    t_float=str(time.time().__round__(3))
+
+    token_cookies = {
+     'bristol_local_anonymous': '3R0Z2ClJJydb%2BX1s4ARamSmiunXpD%2BWaAYyx0SyMq%2F5mNlZdu5xFP2Dcsa7DTmJz0Apybqh4N5jVTyLNJ0XF%2FA%3D%3D',
+    '_userGUID': '0:lys9b7xs:CoigBv0SNlUrUrP~2_RZ30wj4eru9k69',
+    '_dvs': '0:lysc08h6:mQdnUGFPxrU8PPJA5Tll4KDOocHdFjiM',
+    'qrator_jsid': '1721371261.996.3KbrqhvO1wXiHbxo-9mteb4mi10u9s1l5j6qtp47idlq10bi1',
+    'dSesn': 'c6e77a55-544c-45d2-e46e-6233712ca1e5',
+    }
+
+    token_headers = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    # 'Cookie': 'bristol_local_anonymous=3R0Z2ClJJydb%2BX1s4ARamSmiunXpD%2BWaAYyx0SyMq%2F5mNlZdu5xFP2Dcsa7DTmJz0Apybqh4N5jVTyLNJ0XF%2FA%3D%3D; _userGUID=0:lys9b7xs:CoigBv0SNlUrUrP~2_RZ30wj4eru9k69; qrator_ssid=1721371260.609.3ecMl4HiRHxaq2l7-sivpqlnf7655t5rl8v1ijj3kt8d6878u; dSesn=71676992-0d85-778f-40cd-f989705f58a2; _dvs=0:lysc08h6:mQdnUGFPxrU8PPJA5Tll4KDOocHdFjiM; qrator_jsid=1721371261.996.3KbrqhvO1wXiHbxo-j9qh4muag8tel8jgpb3hl7l6cgmc5v62',
+    'DNT': '1',
+    'Pragma': 'no-cache',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    }
+
+    token_params = {
+        's': 'пиво',
+    }
 
     headers = {
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-        'AnonToken': 'tVAss9VYmDPqnDUF/U+2vjVqgEBmXhQRQdbsEwdG8jOX9V+uW6kP03RfEPA5q3VFfqblJYN0YKR/R9bhSR82rg==',
-        'BristolApiToken': 'token',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'DNT': '1',
-        'Origin': 'https://bristol.ru',
-        'Pragma': 'no-cache',
-        'Referer': 'https://bristol.ru/',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-site',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-        'appversion': '1.0',
-        'hash': '202d4c9e27cffffdb5329f47a4d96f8b',
-        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'timestamp': '1721305874744',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+    'AnonToken': 'QekYdJM5QmvFblVTFHJFO9Em24XhaQeh5ATKlKjHb6qL9trbcIS9r6PPT3yy2dB1du/JX3VDIk1RRHCocks+cQ==',
+    'BristolApiToken': 'token',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'DNT': '1',
+    'Origin': 'https://bristol.ru',
+    'Pragma': 'no-cache',
+    'Referer': 'https://bristol.ru/',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-site',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    'appversion': '1.0',
+    'hash': '808fe063485d69252c9ba21ed1fd3802',
+    'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'timestamp': t,
     }
 
     params = {
@@ -39,9 +75,20 @@ def bristolDoCsv(search):
         'products_without_shop': 'false',
     }
 
-    response = requests.get(url, headers=headers, params=params)
+    session=requests.session()
+    token_response=session.get(token_url,headers=token_headers,params=token_params)
+    res_cook=token_response.cookies
+    response = session.get(url, headers=headers, params=params, cookies=res_cook)
+    print(response.text)
     #data = response.json()
-    print(response)
+
+    #match = re.search(r'anonymousCartToken:"(.*?)",', token_response.text)
+   # if match:
+       #token = match.group(1)
+       # print(token)
+    #else:
+   #     print("anonymousCartToken not found")
+   #     return
 #    while flag:
 #        response = requests.get(url, headers=headers, params=params)
 #        data = response.json()
