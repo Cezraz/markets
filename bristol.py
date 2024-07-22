@@ -9,7 +9,7 @@ import time
 def bristolDoCsv(search):
     driver = uc.Chrome()
     driver.get('https://bristol.ru/search?s=%D0%BF%D0%B8%D0%B2%D0%BE')
-    time.sleep(3)
+    time.sleep(2)
     cookies = driver.get_cookies()
     res = {}
     #print(cookies)
@@ -18,19 +18,12 @@ def bristolDoCsv(search):
     #print(res)
 
     page=1
-    flag=False
+    flag=True
     token_url="https://bristol.ru/search?s=%D0%BF%D0%B8%D0%B2%D0%BE"
     url = "https://api.mobile.bristol.ru/api/v3/products/search"
     t = str(int(time.time()//1))
     t_float=str(time.time().__round__(3))
 
-    token_cookies = {
-     'bristol_local_anonymous': '3R0Z2ClJJydb%2BX1s4ARamSmiunXpD%2BWaAYyx0SyMq%2F5mNlZdu5xFP2Dcsa7DTmJz0Apybqh4N5jVTyLNJ0XF%2FA%3D%3D',
-    '_userGUID': '0:lys9b7xs:CoigBv0SNlUrUrP~2_RZ30wj4eru9k69',
-    '_dvs': '0:lysc08h6:mQdnUGFPxrU8PPJA5Tll4KDOocHdFjiM',
-    'qrator_jsid': '1721371261.996.3KbrqhvO1wXiHbxo-9mteb4mi10u9s1l5j6qtp47idlq10bi1',
-    'dSesn': 'c6e77a55-544c-45d2-e46e-6233712ca1e5',
-    }
 
     token_headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -92,46 +85,38 @@ def bristolDoCsv(search):
     token_response = session.get(token_url,headers=token_headers,params=token_params,cookies=res)
     res_cook = token_response.cookies
     response = session.get(url, headers=headers, params=params, cookies=res_cook)
-    print(response.json())
-    #data = response.json()
+    #print(response.json())
 
-    #match = re.search(r'anonymousCartToken:"(.*?)",', token_response.text)
-   # if match:
-       #token = match.group(1)
-       # print(token)
-    #else:
-   #     print("anonymousCartToken not found")
-   #     return
-#    while flag:
-#        response = requests.get(url, headers=headers, params=params)
-#        data = response.json()
-#        if data['products_count'] <= page*100:
-#            flag = False
-#        for i in range(len(data['promo_products'])):
-#            data_item = data['promo_products'][i]
-#            data_price=""
-#            match data_item['prices']['type']:
-#                case "one_price":
-#                    data_price = str(data_item['prices']['regular_price'])
-#
-#                case "show_where_to_buy_price_red_catalog" | "show_where_to_buy_price_yellow_catalog":
-#                    data_price = str(data_item['prices']['show_where_to_buy_price'])
-#
-#                case _:
-#                    data_price = str(data_item['prices']['promo_price'])
-#
-#            print(data_item['name'] + " : " + data_price)
-#            if page == 1 and i == 0:
-#                with open('bristol.csv', 'w+', newline='') as csvfile:
-#                    writer = csv.writer(csvfile, delimiter=';',
-#                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#                    writer.writerow([data_item['name']] + [data_price])
-#            else:
-#                with open('bristol.csv', 'a+', newline='') as csvfile:
-#                    writer = csv.writer(csvfile, delimiter=';',
-#                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#                    writer.writerow([data_item['name']] + [data_price])
-#        page += 1
+    while flag:
+        response = requests.get(url, headers=headers, params=params)
+        data = response.json()
+        if data['products_count'] <= page*100:
+            flag = False
+        for i in range(len(data['promo_products'])):
+            data_item = data['promo_products'][i]
+            data_price=""
+            match data_item['prices']['type']:
+                case "one_price":
+                    data_price = str(data_item['prices']['regular_price'])
+
+                case "show_where_to_buy_price_red_catalog" | "show_where_to_buy_price_yellow_catalog":
+                    data_price = str(data_item['prices']['show_where_to_buy_price'])
+
+                case _:
+                    data_price = str(data_item['prices']['promo_price'])
+
+            print(data_item['name'] + " : " + data_price)
+            if page == 1 and i == 0:
+                with open('bristol.csv', 'w+', newline='') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';',
+                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    writer.writerow([data_item['name']] + [data_price])
+            else:
+                with open('bristol.csv', 'a+', newline='') as csvfile:
+                    writer = csv.writer(csvfile, delimiter=';',
+                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                    writer.writerow([data_item['name']] + [data_price])
+        page += 1
 
 
 bristolDoCsv("пиво")
