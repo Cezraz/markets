@@ -3,7 +3,20 @@ import requests
 import csv
 import time
 import re
+
+import undetected_chromedriver as uc
+import time
 def bristolDoCsv(search):
+    driver = uc.Chrome()
+    driver.get('https://bristol.ru/search?s=%D0%BF%D0%B8%D0%B2%D0%BE')
+    time.sleep(3)
+    cookies = driver.get_cookies()
+    res = {}
+    #print(cookies)
+    for item in range(len(cookies)):
+        res[cookies[item]['name']] = cookies[item]['value']
+    #print(res)
+
     page=1
     flag=False
     token_url="https://bristol.ru/search?s=%D0%BF%D0%B8%D0%B2%D0%BE"
@@ -76,10 +89,10 @@ def bristolDoCsv(search):
     }
 
     session = requests.session()
-    token_response = session.get(token_url,headers=token_headers,params=token_params)
+    token_response = session.get(token_url,headers=token_headers,params=token_params,cookies=res)
     res_cook = token_response.cookies
     response = session.get(url, headers=headers, params=params, cookies=res_cook)
-    print(response.text)
+    print(response.json())
     #data = response.json()
 
     #match = re.search(r'anonymousCartToken:"(.*?)",', token_response.text)
