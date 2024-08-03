@@ -1,8 +1,7 @@
 import json
 import requests
 import csv
-import pandas as pd
-import numpy as np
+
 
 def magnitDoCsv(search):
     flag = True
@@ -74,6 +73,13 @@ def magnitDoCsv(search):
     while flag:
         response = requests.post(url, headers=headers, json=payload)
         data = response.json()
+        if not data['items']:
+            with open('magnit.csv', 'w+', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            print("Not found")
+            flag = False
+            break
 
         if data['pagination']['totalCount'] < (payload['pagination']['offset'] +payload['pagination']['limit']):
             flag = False
@@ -106,9 +112,9 @@ def magnitDoCsv(search):
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow([str(data['data'][i]['name'])] + [true_price])
-            print(str(data['data'][i]['name']) + " " + true_price)
+            #print(str(data['data'][i]['name']) + " " + true_price)
 
-#magnitDoCsv("")
+#magnitDoCsv("сникерс")
 
 #with open("./magnit.csv", 'r') as file:
 #    csvreader = csv.reader(file)

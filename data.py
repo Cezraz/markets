@@ -1,4 +1,11 @@
 import json
+
+import pyaterochka
+from bristol import bristolDoCsv
+from pyaterochka import pDoCsv
+from magnit import magnitDoCsv
+from maxi import maxiDoCsv
+import yandex
 import requests
 import csv
 from bs4 import BeautifulSoup
@@ -67,7 +74,7 @@ def pyatDoCsv(search):
             print(str(data['products'][i]['name']) + " " + str(true_price))
         offset += 200
 
-def magnitDoCsv(search):
+def magnitDoCsv1(search):
     flag = True
     url = "https://magnit.ru/webgate/v2/goods/search"
     url_get = "https://magnit.ru/webgate/v1/promotions/search?storeCode=290053&query="+search+"&limit=36&offset=0"
@@ -169,7 +176,7 @@ def magnitDoCsv(search):
             writer.writerow([str(data['data'][i]['name'])] + [true_price])
         print(str(data['data'][i]['name']) + " " + true_price)
 
-def maxiDoCsv(search):
+def maxiDoCsv1(search):
     #search ="adrenaline"
     driver = webdriver.Chrome()
     # загрузка страницы
@@ -219,11 +226,14 @@ def maxiDoCsv(search):
 
 
 def getAllData(search):
-    pyatDoCsv(search=search)
+    pDoCsv(search=search)
     magnitDoCsv(search=search)
     maxiDoCsv(search=search)
+    bristolDoCsv(search=search)
+    yandex.yandexDoCsv(search, "magnit_sem")
+    yandex.yandexDoCsv(search, "lenta")
 
-    market_files = ['5ka', 'magnit', 'maxi']
+    market_files = ['5ka', 'magnit', 'maxi', 'bristol', 'yandex_magnit_sem', 'yandex_lenta']
     market_returns = {}
     remove_sumbols = "[']"
 

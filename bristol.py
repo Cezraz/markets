@@ -78,6 +78,14 @@ def bristolDoCsv(search):
         }
         response = requests.get(url, headers=headers, params=params, cookies=res)
         data = response.json()
+        #print(data)
+        if data['products_count'] == 0:
+            with open('bristol.csv', 'w+', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=';',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            print("Not found")
+            flag=False
+            break
         if data['products_count'] <= page*24:
             flag = False
         for i in range(len(data['promo_products'])):
@@ -97,7 +105,7 @@ def bristolDoCsv(search):
                     #print(data_item['prices']['type'])
                     data_price = str(data_item['prices']['promo_price'])
 
-            print(data_item['name'] + " : " + data_price)
+            #print(data_item['name'] + " : " + data_price)
 
             if page == 1 and i == 0:
                 with open('bristol.csv', 'w+', newline='') as csvfile:
@@ -112,4 +120,4 @@ def bristolDoCsv(search):
         page += 1
 
 
-bristolDoCsv("вино")
+#bristolDoCsv("321312412412413412")

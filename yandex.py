@@ -71,6 +71,12 @@ def yandexDoCsv(search,place):
     }
     response = requests.post(url, headers=headers, json=payload, cookies=cookies)
     data = response.json()
+    if data['blocks'][0]['payload'] == {}:
+        with open('yandex_' + place + '.csv', 'w+', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        print("Not found")
+        return
     for item in range(len(data['blocks'][0]['payload']['products'])):
         data_item = data['blocks'][0]['payload']['products'][item]
         print(str(data['blocks'][0]['payload']['products'][item]['name']))
@@ -157,4 +163,4 @@ def yandexDoCsvAll(search):
                    writer.writerow([str(data_item['title'])] + [data_item['decimal_price']+".00"])
     print("done")
 
-yandexDoCsvAll("adrenaline")
+#yandexDoCsv("a231131231","lenta")

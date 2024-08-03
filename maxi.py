@@ -55,3 +55,4 @@ def maxiDoCsv(search):
                     writer.writerow([names[j]]+[prices[j]])
         print("Обработано "+str(i+1)+" страниц(a/ы) из "+str(total_pages))
 
+#maxiDoCsv("321321321")
