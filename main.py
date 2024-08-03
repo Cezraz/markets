@@ -28,7 +28,7 @@ async def cmd_start(message: types.Message):
 async def echo_with_time(message: types.Message):
     res = getAllData(message.text)
     for i in range(len(res)):
-        res_str = str(list(res.keys())[i])+"\n"
+        res_str = "<u><b>"+str(list(res.keys())[i])+"</b></u>\n"
         res_list = list(res.values())[i]
         for j in range(len(res_list)):
             res_str += "<b>"+str(res_list[j][0])+"</b>" + "\nЦена:" + str(res_list[j][1]) + " руб.\n\n"
