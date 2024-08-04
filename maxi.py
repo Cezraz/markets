@@ -42,13 +42,13 @@ def maxiDoCsv(search):
             prices.append(temp_str[ind+1:len(temp_str)-2])
 
         if i == 0:
-            with open('maxi.csv', 'w', newline='') as csvfile:
+            with open('maxi.csv', 'w', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                         quotechar ='|', quoting=csv.QUOTE_MINIMAL)
                 for j in range(len(prices)):
                     writer.writerow([names[j]]+[prices[j]])
         else:
-            with open('maxi.csv', 'a+', newline='') as csvfile:
+            with open('maxi.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                         quotechar ='|', quoting=csv.QUOTE_MINIMAL)
                 for j in range(len(prices)):

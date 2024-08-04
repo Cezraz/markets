@@ -74,7 +74,7 @@ def magnitDoCsv(search):
         response = requests.post(url, headers=headers, json=payload)
         data = response.json()
         if not data['items']:
-            with open('magnit.csv', 'w+', newline='') as csvfile:
+            with open('magnit.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             print("Not found")
@@ -87,13 +87,13 @@ def magnitDoCsv(search):
             true_price = str(data['items'][i]['price'])[:-2] + ".99"
             if payload['pagination']['offset'] == 0 and i == 0:
 
-                with open('magnit.csv', 'w+', newline='') as csvfile:
+                with open('magnit.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     writer.writerow(["name"]+["price"])
                     writer.writerow([str(data['items'][i]['name'])] + [true_price])
             else:
-                with open('magnit.csv', 'a+', newline='') as csvfile:
+                with open('magnit.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     writer.writerow([str(data['items'][i]['name'])] + [true_price])

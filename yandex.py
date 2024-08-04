@@ -72,7 +72,7 @@ def yandexDoCsv(search,place):
     response = requests.post(url, headers=headers, json=payload, cookies=cookies)
     data = response.json()
     if data['blocks'][0]['payload'] == {}:
-        with open('yandex_' + place + '.csv', 'w+', newline='') as csvfile:
+        with open('yandex_' + place + '.csv', 'w+', newline='', encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile, delimiter=';',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
         print("Not found")
@@ -83,12 +83,12 @@ def yandexDoCsv(search,place):
         if '\xd7' in data_item['name']:
             data_item['name']=str(data_item['name']).replace('\xd7',"")
         if item == 0:
-            with open('yandex_'+place+'.csv', 'w+', newline='') as csvfile:
+            with open('yandex_'+place+'.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow([data_item['name']] + [data_item['decimalPrice']])
         else:
-            with open('yandex_'+place+'.csv', 'a+', newline='') as csvfile:
+            with open('yandex_'+place+'.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow([str(data_item['name'])] + [str(data_item['decimalPrice'])])
@@ -152,12 +152,12 @@ def yandexDoCsvAll(search):
             if '\xd7' in data_item['title']:
                data_item['title']=str(data_item['title']).replace('\xd7',"")
             if item == 0:
-               with open('yandex_all.csv', 'w+', newline='') as csvfile:
+               with open('yandex_all.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                    writer = csv.writer(csvfile, delimiter=';',
                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
                    writer.writerow([data_item['title']] + [data_item['decimal_price']+".00"])
             else:
-               with open('yandex_all.csv', 'a+', newline='') as csvfile:
+               with open('yandex_all.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                    writer = csv.writer(csvfile, delimiter=';',
                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
                    writer.writerow([str(data_item['title'])] + [data_item['decimal_price']+".00"])

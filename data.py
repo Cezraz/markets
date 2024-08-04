@@ -239,7 +239,7 @@ def getAllData(search):
 
     for i in range(len(market_files)):
         rows = []
-        with open("./" + market_files[i] + ".csv", 'r') as file:
+        with open("./" + market_files[i] + ".csv", 'r', encoding="utf-8") as file:
             csvreader = csv.reader(file)
             for row in csvreader:
                 str_row = str(row)

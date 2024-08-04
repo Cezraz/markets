@@ -53,15 +53,15 @@ def pDoCsv(search):
             true_price = data['products'][i]['prices']['cpd_promo_price']
 
         if offset == 0 and i == 0:
-            with open('5ka.csv', 'w+', newline='') as csvfile:
+            with open('5ka.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow([str(data['products'][i]['name'])] + [true_price])
         else:
-            with open('5ka.csv', 'a+', newline='') as csvfile:
+            with open('5ka.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow([str(data['products'][i]['name'])] + [true_price])
-        #print(str(data['products'][i]['name']) + " " + str(true_price))
+        print(str(data['products'][i]['name']) + " " + str(true_price))
 
-#pDoCsv("2313121312")
+pDoCsv("Гриджо Каза Дефра")

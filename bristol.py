@@ -80,7 +80,7 @@ def bristolDoCsv(search):
         data = response.json()
         #print(data)
         if data['products_count'] == 0:
-            with open('bristol.csv', 'w+', newline='') as csvfile:
+            with open('bristol.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                 writer = csv.writer(csvfile, delimiter=';',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             print("Not found")
@@ -108,12 +108,12 @@ def bristolDoCsv(search):
             #print(data_item['name'] + " : " + data_price)
 
             if page == 1 and i == 0:
-                with open('bristol.csv', 'w+', newline='') as csvfile:
+                with open('bristol.csv', 'w+', newline='', encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     writer.writerow([data_item['name']] + [data_price])
             else:
-                with open('bristol.csv', 'a+', newline='') as csvfile:
+                with open('bristol.csv', 'a+', newline='', encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
                     writer.writerow([data_item['name']] + [data_price])
